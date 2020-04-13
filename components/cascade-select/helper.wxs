@@ -1,0 +1,13 @@
+module.exports = {
+  isSubFilterItemSelected: function (item, selected, activeGroup, level) {
+    var selectedFilter = (selected[activeGroup] || {})[level]
+    // 拙逼的微信不能用typeof, Array.isArray
+    if (selectedFilter && selectedFilter.length && selectedFilter.length > 0) {
+      return selectedFilter.some(function(d) {
+        console.log(d, d.id, item, item.id)
+        return d.id === item.id
+      })
+    }
+    return selectedFilter && selectedFilter.id === item.id
+  }
+}

@@ -1,0 +1,77 @@
+<wxs src="./helper.wxs" module="helper" />
+
+<view class="container {{ open ? 'open' : ''}}">
+  <view class="header">
+    <view
+      bindtap="handleClickGroup"
+      data-group="{{item.name}}"
+      class="group {{ item.name === activeGroup ? 'active' : '' }}"
+      wx:key="name"
+      wx:for="{{data}}"
+    >
+      {{item.label}}
+    </view>
+  </view>
+  <block wx:if="{{open}}">
+    <view class="content {{ activeGroupViewType }}">
+      <!-- 遍历filter -->
+      <view
+        wx:key="id"
+        wx:for="{{filters[activeGroup]}}"
+        wx:for-item="filter"
+        wx:for-index="level"
+        class="sub-filter {{ filter.length ? '' : 'no-data' }}"
+      >
+        <!-- 每个filter本身是一个数组 -->
+        <block wx:if="{{filter && filter.length}}">
+          <block
+            wx:key="id"
+            wx:for="{{filter}}"
+          >
+
+            <!-- type = slider -->
+            <slider
+              wx:if="{{item.type === 'slider'}}"
+              min="{{item.min || 0}}" max="{{item.max || 100}}" show-value />
+
+            <!-- type = group -->
+            <view wx:elif="{{item.type === 'group'}}">
+              <view class="sub-filter-group-title">{{item.label}}</view>
+              <view class="sub-filter-group-body">
+                <view
+                  wx:key="id"
+                  wx:for="{{item.children}}"
+                  wx:for-item="groupItem"
+                  bindtap="handleClickFilter"
+                  data-filter="{{ { item: groupItem, level } }}"
+                  class="sub-filter-group-item {{ helper.isSubFilterItemSelected(groupItem, selected, activeGroup, level) ? 'active' : '' }}"
+                >
+                  {{groupItem.label}}
+                </view>
+              </view>
+
+            </view>
+
+            <view
+              wx:else
+              bindtap="handleClickFilter"
+              data-filter="{{ { item, level } }}"
+              class="sub-filter-item {{item.type}} {{ helper.isSubFilterItemSelected(item, selected, activeGroup, level) ? 'active' : '' }}"
+            >
+              {{item.label}}
+            </view>
+          </block>
+        </block>
+        <view wx:else class="sub-filter-item">
+          无有效筛选项
+        </view>
+      </view>
+    </view>
+    <view class="footer">
+      <button class="btn" bindtap="handleCancel">取消</button>
+      <button class="btn" bindtap="handleConfirm" type="primary">确定</button>
+    </view>
+  </block>
+
+  <!-- <date-picker>components/multi-select.wxml</date-picker> -->
+</view>

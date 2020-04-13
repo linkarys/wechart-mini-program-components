@@ -1,0 +1,14 @@
+.container {
+}
+
+
+.header {
+	font-size: 18px;
+	padding: 24px;
+	text-align: center;
+	font-weight: bold;
+}
+
+.footer {
+	padding: 12px;
+}

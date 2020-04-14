@@ -15,11 +15,11 @@ Component({
         this.initSelectedData(data);
       }
     },
-    onConfirm: {
+    bindconfirm: {
       type: Function,
       value: noop,
     },
-    onCancel: {
+    bindcancel: {
       type: Function,
       value: noop,
     },
@@ -102,7 +102,6 @@ Component({
         activeGroupViewType,
         [`filters.${activeGroup}`]: activeFilters,
       });
-      // this.setData({ activeGroup, filters, open: true });
     },
 
     /**
@@ -120,7 +119,7 @@ Component({
       const { multiple, maxLevel = Infinity } = groupConf
       const selectedGroup = selected[activeGroup]
 
-      const isParentChange = level > 0
+      const isParentChange = level >= 0
         && level < selectedGroup.length - 1
         && selectedGroup[selectedGroup.length - 2].id !== item.id
 
@@ -158,8 +157,8 @@ Component({
         .filter((d, index) => index <= Math.min(nextLevel, maxLevel) && d.length)
 
       console.log(
-        ' groupConf: %o\n multiple: %o\n selectedGroup: %o\n item: %o\n nextActiveFilters: %o',
-        groupConf, multiple, selectedGroup, item, nextActiveFilters
+        ' isParentChange: %s, level: %s, groupConf: %o\n multiple: %o\n selectedGroup: %o\n item: %o\n nextActiveFilters: %o',
+        isParentChange, level, groupConf, multiple, selectedGroup, item, nextActiveFilters
       );
 
       this.setData({
@@ -170,17 +169,21 @@ Component({
 
     // 点击取消
     handleCancel() {
-      const { onCancel } = this.properties;
+      const { bindcancel } = this.properties;
       this.setData({ open: false, activeGroup: null });
-      onCancel && onCancel(this.data.selected);
+      if (typeof bindcancel === 'function') {
+        bindcancel(this.data.selected);
+      }
     },
 
     // 点击确认
     handleConfirm() {
-      const { onConfirm } = this.properties;
+      const { bindconfirm } = this.properties;
       this.setData({ open: false, activeGroup: null });
-      console.log(this.data.selected);
-      onConfirm && onConfirm(this.data.selected);
+
+      if (typeof bindconfirm === 'function') {
+        bindconfirm(this.data.selected);
+      }
     },
 
 

@@ -6,7 +6,7 @@ export default [
 	viewType: 'column',
 	// 是否多选
 	multiple: true,
-	// 指明filter层数, multiple=true时必需, 否则multiple无效
+	// 指明filter层数, multiple=true时必需, 否则multiple无效, 从0开始计数
 	maxLevel: 2,
 	placeholder: '请选择',
 	children: [{
@@ -114,6 +114,8 @@ export default [
 	label: '户型',
 	name: 'type',
 	placeholder: '请选择',
+	multiple: true,
+	maxLevel: 1,
 	viewType: 'row',
 	children: [
 		{

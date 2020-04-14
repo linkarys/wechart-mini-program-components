@@ -12,10 +12,16 @@ Page({
 		helloData,
 		cascadeData: demoData,
 	},
-	changeName: function (e) {
-		// sent data change to view
+	onLoad() {
 		this.setData({
-			name: 'MINA'
+			handleSelectCancel: this.handleSelectCancel.bind(this),
+			handleSelectChange: this.handleSelectChange.bind(this),
 		})
+	},
+	handleSelectCancel: function(e) {
+		console.log('cancel select')
+	},
+	handleSelectChange: function(data) {
+		console.log('data: %o', data)
 	}
 })
